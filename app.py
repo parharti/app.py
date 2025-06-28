@@ -3,7 +3,9 @@ import requests
 from datetime import datetime
 
 app = Flask(__name__)
-MIDDLEWARE_CHAT_URL = "http://localhost:8080/chat"
+MIDDLEWARE_CHAT_URL = "https://server-py-ebxq.onrender.com/chat"
+
+
 chat_memory = []
 
 
@@ -137,7 +139,7 @@ HTML_TEMPLATE = """
     </style>
 </head>
 <body>
-    <h2>Chat with MedPlat Bot 🌐</h2>
+    <h2>Chat with MedPlat</h2>
     <button class="toggle-theme" onclick="toggleTheme()">Toggle Dark Mode</button>
 
     <div class="chatbox">
@@ -282,4 +284,4 @@ def send_message():
         return jsonify([error_msg])
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(host="0.0.0.0",debug=True, port=3000)
