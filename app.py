@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify, render_template_string
+from flask import Flask, request, jsonify, render_template_string, session
 import requests
 from datetime import datetime
+import uuid
 
 app = Flask(__name__)
 MIDDLEWARE_CHAT_URL = "https://server-py-ebxq.onrender.com/chat"
