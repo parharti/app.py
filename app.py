@@ -246,9 +246,15 @@ HTML_TEMPLATE = """
 """
 
 
+@app.before_request
+def create_session():
+    if "chat_id" not in session:
+        session["chat_id"] = str(uuid.uuid4())
+        session["chat_memory"] = []
+
 @app.route("/", methods=["GET"])
 def index():
-    return render_template_string(HTML_TEMPLATE, chat=chat_memory)
+    return render_template_string(HTML_TEMPLATE, chat=session.get("chat_memory", []))
 
 @app.route("/send_message", methods=["POST"])
 def send_message():
@@ -256,10 +262,11 @@ def send_message():
     user_msg = data.get("message")
     now = datetime.now().strftime("%H:%M")
 
-    chat_memory.append({"sender": "user", "text": user_msg, "time": now})
+    chat_history = session.get("chat_memory", [])
+    chat_history.append({"sender": "user", "text": user_msg, "time": now})
 
     try:
-        payload = {"sender": "web_user", "message": user_msg}
+        payload = {"sender": session["chat_id"], "message": user_msg}
         response = requests.post(MIDDLEWARE_CHAT_URL, json=payload, timeout=30)
         response.raise_for_status()
         bot_msgs = response.json()
@@ -272,9 +279,10 @@ def send_message():
                     "text": bot_msg["text"],
                     "time": datetime.now().strftime("%H:%M")
                 }
-                chat_memory.append(msg)
+                chat_history.append(msg)
                 responses.append(msg)
 
+        session["chat_memory"] = chat_history
         return jsonify(responses)
 
     except Exception as e:
@@ -283,8 +291,14 @@ def send_message():
             "text": f"⚠️ Error: {e}",
             "time": datetime.now().strftime("%H:%M")
         }
-        chat_memory.append(error_msg)
+        chat_history.append(error_msg)
+        session["chat_memory"] = chat_history
         return jsonify([error_msg])
 
+@app.route("/reset", methods=["GET"])
+def reset_chat():
+    session["chat_memory"] = []
+    return "Chat has been reset.", 200
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",debug=True, port=3000)
+    app.run(host="0.0.0.0", debug=True, port=3000)
