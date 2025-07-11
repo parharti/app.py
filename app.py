@@ -8,30 +8,29 @@ MIDDLEWARE_CHAT_URL = "https://server-py-ebxq.onrender.com/chat"
 
 chat_memory = []
 
-
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MedPlat Multilingual Chatbot</title>
+    <title>MedPlat: Multilingual AI Health Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         :root {
-            --bg: #f4f4f9;
+            --bg: #f5fff6;
             --card-bg: #ffffff;
-            --primary: #4b2aad;
-            --primary-dark: #3a2089;
-            --user-bg: #d8d3f7;
-            --bot-bg: #f1f1f1;
-            --text: #333;
+            --primary: #34a853;
+            --primary-dark: #2a8642;
+            --user-bg: #d6f5dd;
+            --bot-bg: #e8f5e9;
+            --text: #1b1b1b;
         }
         body.dark {
-            --bg: #121212;
-            --card-bg: #1e1e1e;
-            --user-bg: #3f3c78;
-            --bot-bg: #2a2a2a;
-            --text: #eaeaea;
+            --bg: #0d1a0d;
+            --card-bg: #1c2d1c;
+            --user-bg: #2a4d2a;
+            --bot-bg: #193319;
+            --text: #eafaea;
         }
         body {
             margin: 0;
@@ -44,13 +43,17 @@ HTML_TEMPLATE = """
             align-items: center;
             padding: 30px 10px;
         }
-        h2 {
+        h1 {
             color: var(--primary);
-            margin-bottom: 10px;
+            font-size: 2rem;
+            margin: 0;
+        }
+        .brand {
+            margin-bottom: 15px;
+            text-align: center;
         }
         .toggle-theme {
-            margin-top: -15px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             cursor: pointer;
             background: none;
             border: 2px solid var(--primary);
@@ -68,8 +71,8 @@ HTML_TEMPLATE = """
             background: var(--card-bg);
             width: 100%;
             max-width: 700px;
-            border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             padding: 20px;
         }
         .chat-history {
@@ -82,9 +85,10 @@ HTML_TEMPLATE = """
             padding: 10px 15px;
             border-radius: 20px;
             max-width: 75%;
-            line-height: 1.5;
             position: relative;
             font-size: 15px;
+            line-height: 1.5;
+            animation: fadeIn 0.4s ease-in-out;
         }
         .user-message {
             background: var(--user-bg);
@@ -125,6 +129,7 @@ HTML_TEMPLATE = """
             border-radius: 25px;
             font-size: 15px;
             cursor: pointer;
+            transition: 0.2s ease;
         }
         input[type=submit]:hover,
         button.mic-btn:hover {
@@ -136,10 +141,17 @@ HTML_TEMPLATE = """
             border-radius: 10px;
             border: 1px solid var(--primary);
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
-    <h2>Chat with MedPlat</h2>
+    <div class="brand">
+        <h1>🩺 Sashakti</h1>
+        <p>A Multilingual AI Chatbot to Empower India’s Frontline Health Workers</p>
+    </div>
     <button class="toggle-theme" onclick="toggleTheme()">Toggle Dark Mode</button>
 
     <div class="chatbox">
@@ -209,32 +221,23 @@ HTML_TEMPLATE = """
         }
 
         function startListening() {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = voiceLangSelect.value || 'en-IN';
-    recognition.continuous = false;
-    recognition.interimResults = false;
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = voiceLangSelect.value || 'en-IN';
+            recognition.continuous = false;
+            recognition.interimResults = false;
 
-    recognition.onstart = () => {
-        console.log("Voice recognition started. Speak...");
-    };
-
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        console.log("Transcript:", transcript);
-        userInput.value = transcript;
-    };
-
-    recognition.onerror = (event) => {
-        console.error("Voice recognition error:", event.error);
-        alert('Voice recognition error: ' + event.error);
-    };
-
-    recognition.onend = () => {
-        console.log("Voice recognition ended.");
-    };
-
-    recognition.start();
-}
+            recognition.onstart = () => console.log("🎙️ Listening...");
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+            };
+            recognition.onerror = (event) => {
+                console.error("Voice error:", event.error);
+                alert("🎤 Voice recognition error: " + event.error);
+            };
+            recognition.onend = () => console.log("🛑 Stopped listening.");
+            recognition.start();
+        }
 
         chatHistory.scrollTop = chatHistory.scrollHeight;
     </script>
