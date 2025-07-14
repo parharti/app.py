@@ -183,7 +183,7 @@ HTML_TEMPLATE = """
   <div class="top-bar">
     <div class="brand">
   <a href="https://www.medplat.in/" target="_blank">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+    <img src="{{ url_for(filename='logo.png') }}" alt="Logo">
   </a>
   <div>
     <h1>MedPlat Shashakti</h1>
