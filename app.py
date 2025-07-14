@@ -180,19 +180,20 @@ HTML_TEMPLATE = """
   </style>
 </head>
 <body>
-  <div class="top-bar">
-    <div class="brand">
-  <a href="https://www.medplat.in/" target="_blank">
-    <img src="{{ url_for(filename='logo.png') }}" alt="Logo">
-  </a>
-  <div>
-    <h1>MedPlat Shashakti</h1>
-    <p style="margin: 0; font-weight: 500;">Empowering India's Health Warriors 💪</p>
+<div class="top-bar">
+  <div class="brand">
+    <a href="https://www.medplat.in/" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 28px;">🩺</span>
+      <div>
+        <h1 style="margin: 0;">MedPlat Shashakti</h1>
+        <p style="margin: 0; font-weight: 500;">Empowering India's Health Warriors 💪</p>
+      </div>
+    </a>
   </div>
+
+  <button class="toggle-theme" onclick="toggleTheme()">🌙 Toggle Theme</button>
 </div>
 
-    <button class="toggle-theme" onclick="toggleTheme()">🌙 Toggle Theme</button>
-  </div>
 
   <div class="chatbox">
     <div class="chat-history" id="chat-history">
